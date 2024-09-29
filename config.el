@@ -5,11 +5,14 @@
     :desc "Expand region" "e" #'er/expand-region
     :desc "Increase font size" "+" #'doom/increase-font-size
     :desc "Decrease font size" "-" #'doom/decrease-font-size
-    :desc "Next buffer" "k" #'iflipb-next-buffer
-    :desc "Previous buffer" "j" #'iflipb-previous-buffer
+    :desc "Next buffer" "k" #'centaur-tabs-forward
+    :desc "Previous buffer" "j" #'centaur-tabs-backward
     :desc "Search buffer" "/" #'+default/search-buffer
     :desc "Search buffer" "ps" #'+default/search-project
     :desc "Switch window" "TAB" #'ace-window)
+
+(define-key evil-normal-state-map (kbd "H") 'centaur-tabs-backward)
+(define-key evil-normal-state-map (kbd "L") 'centaur-tabs-forward)
 
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
