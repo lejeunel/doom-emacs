@@ -5,8 +5,8 @@
     :desc "Expand region" "e" #'er/expand-region
     :desc "Increase font size" "+" #'doom/increase-font-size
     :desc "Decrease font size" "-" #'doom/decrease-font-size
-    :desc "Next buffer" "k" #'centaur-tabs-forward
-    :desc "Previous buffer" "j" #'centaur-tabs-backward
+    :desc "Next buffer" "k" #'next-buffer
+    :desc "Previous buffer" "j" #'previous-buffer
     :desc "Search buffer" "/" #'+default/search-buffer
     :desc "Search buffer" "ps" #'+default/search-project
     :desc "Switch window" "TAB" #'ace-window)
