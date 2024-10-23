@@ -23,12 +23,14 @@
 (setq doom-theme 'doom-gruvbox)
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :height 1.0 :weight 'normal))
+(setq truncate-lines 'nil)
 
 (setq highlight-indent-guides-auto-odd-face-perc 50)
 (setq highlight-indent-guides-auto-even-face-perc 50)
 (setq highlight-indent-guides-auto-character-face-perc 50)
-(setq highlight-indent-guides-method 'character)
+;; (setq highlight-indent-guides-method 'character)
 (setq highlight-indent-guides-responsive 'top)
+
 (setq display-line-numbers-type 'relative)
 
 (custom-theme-set-faces!

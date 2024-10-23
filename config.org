@@ -48,6 +48,7 @@ Colors and fonts
 (setq doom-theme 'doom-gruvbox)
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :height 1.0 :weight 'normal))
+(setq truncate-lines 'nil)
 #+end_src
 
 Indentation guides
