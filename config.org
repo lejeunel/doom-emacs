@@ -438,6 +438,10 @@ Enable tree-sitter syntax highlighting for all languages.
 #+begin_src emacs-lisp :tangle yes
 (setq +tree-sitter-hl-enabled-modes t)
 #+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(setq confirm-kill-emacs nil)
+#+end_src
 * TMUX
 
 #+begin_src emacs-lisp :tangle yes

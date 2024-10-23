@@ -275,6 +275,8 @@ background of code to whatever theme I'm using's background"
 
 (setq +tree-sitter-hl-enabled-modes t)
 
+(setq confirm-kill-emacs nil)
+
 (defun tmux-sessionizer ()
   (interactive)
   (with-current-buffer
