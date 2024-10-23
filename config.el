@@ -59,6 +59,7 @@
         (setq company-idle-delay 0.1)
         (setq company-tooltip-idle-delay 0.1)
   )
+(set-company-backend! 'prog-mode 'company-files 'company-capf)
 
 (map! :localleader
       :map LaTeX-mode-map

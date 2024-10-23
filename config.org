@@ -2,6 +2,7 @@
 #+AUTHOR: Laurent Lejeune
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../../org/styles/org.css"/>
 
+
 * Introduction
 
 This uses the [[https://github.com/doomemacs/doomemacs][doom-emacs]] configuration framework which provides sane defaults,
@@ -56,8 +57,9 @@ Indentation guides
 (setq highlight-indent-guides-auto-odd-face-perc 50)
 (setq highlight-indent-guides-auto-even-face-perc 50)
 (setq highlight-indent-guides-auto-character-face-perc 50)
-(setq highlight-indent-guides-method 'character)
+;; (setq highlight-indent-guides-method 'character)
 (setq highlight-indent-guides-responsive 'top)
+
 (setq display-line-numbers-type 'relative)
 #+end_src
 
@@ -100,6 +102,7 @@ Force company to use fixed-pitch font
         (setq company-idle-delay 0.1)
         (setq company-tooltip-idle-delay 0.1)
   )
+(set-company-backend! 'prog-mode 'company-files 'company-capf)
 #+end_src
 
 * LaTeX
