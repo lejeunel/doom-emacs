@@ -58,8 +58,9 @@
         (define-key evil-insert-state-map (kbd "C-l") 'company-complete)
         (setq company-idle-delay 0.1)
         (setq company-tooltip-idle-delay 0.1)
-  )
-(set-company-backend! 'prog-mode 'company-files 'company-capf)
+        (add-to-list '+lsp-company-backends 'company-files)
+        (set-company-backend! 'org-mode 'company-files 'company-capf)
+)
 
 (map! :localleader
       :map LaTeX-mode-map
@@ -159,6 +160,12 @@
 (map! :leader "2" 'harpoon-go-to-2)
 (map! :leader "3" 'harpoon-go-to-3)
 (map! :leader "4" 'harpoon-go-to-4)
+(map! :leader "5" 'harpoon-go-to-5)
+(map! :leader "6" 'harpoon-go-to-6)
+(map! :leader "7" 'harpoon-go-to-7)
+(map! :leader "8" 'harpoon-go-to-8)
+(map! :leader "9" 'harpoon-go-to-9)
+(map! :leader "0" 'harpoon-go-to-10)
 
 (setq org-export-use-babel t)
 (setq org-directory "~/org/")
