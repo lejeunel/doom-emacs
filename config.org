@@ -397,7 +397,8 @@ background of code to whatever theme I'm using's background"
 
 ** Org-ref / bibtex
 - We define in ~org-ref-default-bibliography~ a default ~bib~ file.
-- We use [[https://tectonic-typesetting.github.io/en-US/][tectonic]]  to generate ~pdf~ files from LaTeX.
+- We use [[https://tectonic-typesetting.github.io/en-US/][tectonic]] to generate ~pdf~ files from LaTeX.
+- When adding citations in popup buffer, finish by using *M-Enter*.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package! org-ref
