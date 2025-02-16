@@ -46,7 +46,12 @@ Function that allow to move around selections:
 * Appearance
 Colors and fonts
 #+begin_src emacs-lisp :tangle yes
-(setq doom-theme 'doom-gruvbox)
+;; `gruvbox-material' contrast and palette options
+;; (setq doom-gruvbox-material-background  "medium"  ; or hard (defaults to soft)
+;;      doom-gruvbox-material-palette     "original") ; or original (defaults to material)
+
+;; set `doom-theme'
+(setq doom-theme 'doom-gruvbox-material) ; dark variant
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
@@ -257,6 +262,10 @@ with [[https://github.com/douglasdavis/numpydoc.el][numpydoc.el]].
       :desc "Auto docstring"  "s" 'numpydoc-generate)
 #+end_src
 
+* Golang
+#+begin_src emacs-lisp :tangle yes
+(setq lsp-go-use-gofumpt t)
+#+end_src
 * Harpoon.el
 #+begin_src emacs-lisp :tangle yes
 (map! :leader
