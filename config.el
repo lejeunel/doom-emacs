@@ -20,7 +20,12 @@
 (define-key evil-visual-state-map (kbd "K") 'drag-stuff-up)
 (define-key evil-visual-state-map (kbd "J") 'drag-stuff-down)
 
-(setq doom-theme 'doom-gruvbox)
+;; `gruvbox-material' contrast and palette options
+;; (setq doom-gruvbox-material-background  "medium"  ; or hard (defaults to soft)
+;;      doom-gruvbox-material-palette     "original") ; or original (defaults to material)
+
+;; set `doom-theme'
+(setq doom-theme 'doom-gruvbox-material) ; dark variant
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
@@ -148,6 +153,8 @@
 (map! :localleader
       :map python-mode-map
       :desc "Auto docstring"  "s" 'numpydoc-generate)
+
+(setq lsp-go-use-gofumpt t)
 
 (map! :leader
       (:prefix-map ("r" . "Harpoon")
