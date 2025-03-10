@@ -210,11 +210,9 @@ Download standalone [[https://languagetool.org/][LanguageTool]] server from http
 #+end_src
 ** Executables
 #+begin_src emacs-lisp :tangle yes
-(setq flycheck-python-ruff-executable "ruff")
-(add-hook 'python-mode-hook
-  (lambda ()
-    (setq flycheck-checker 'python-ruff)))
+(add-hook 'python-mode-hook #'(lambda () (setq flycheck-checker 'python-pylint)))
 #+end_src
+
 ** Breakpoints
 
 Bindings and functions to add and highlight breakpoints.
@@ -262,6 +260,10 @@ with [[https://github.com/douglasdavis/numpydoc.el][numpydoc.el]].
       :desc "Auto docstring"  "s" 'numpydoc-generate)
 #+end_src
 
+* Docker
+#+begin_src emacs-lisp :tangle yes
+(setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode))
+#+end_src
 * Golang
 #+begin_src emacs-lisp :tangle yes
 (setq lsp-go-use-gofumpt t)

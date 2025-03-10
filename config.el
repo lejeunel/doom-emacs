@@ -114,10 +114,7 @@
 (setq python-shell-interpreter "ipython"
     python-shell-interpreter-args "-i --simple-prompt")
 
-(setq flycheck-python-ruff-executable "ruff")
-(add-hook 'python-mode-hook
-  (lambda ()
-    (setq flycheck-checker 'python-ruff)))
+(add-hook 'python-mode-hook #'(lambda () (setq flycheck-checker 'python-pylint)))
 
 (defvar python--pdb-breakpoint-string "breakpoint()")
 (defun python-add-breakpoint ()
@@ -153,6 +150,8 @@
 (map! :localleader
       :map python-mode-map
       :desc "Auto docstring"  "s" 'numpydoc-generate)
+
+(setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode))
 
 (setq lsp-go-use-gofumpt t)
 
