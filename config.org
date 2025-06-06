@@ -260,6 +260,37 @@ with [[https://github.com/douglasdavis/numpydoc.el][numpydoc.el]].
       :desc "Auto docstring"  "s" 'numpydoc-generate)
 #+end_src
 
+Enable pyright and ruff LSP servers for python-mode
+
+#+begin_src emacs-lisp :tangle yes
+(after! lsp-mode
+  ;; Ensure python-mode uses lsp
+  (add-hook 'python-mode-hook #'lsp)
+
+  ;; Prevent doom from disabling one or the other
+  (setq lsp-disabled-clients '())
+
+  ;; Register ruff-lsp as an additional client
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection '("ruff lsp"))
+    :major-modes '(python-mode)
+    :server-id 'ruff-lsp
+    :add-on? t))) ;; <-- important! allows both Pyright + Ruff
+
+#+end_src
+
+Format using ruff before save
+#+begin_src emacs-lisp :tangle yes
+(after! python
+  (setq +format-with-lsp nil) ;; disable LSP formatting if any
+  (add-hook 'before-save-hook
+            (lambda ()
+              (when (eq major-mode 'python-mode)
+                (call-process "ruff" nil nil nil "format" (buffer-file-name)))
+              nil)))
+#+end_src
+
 * Docker
 #+begin_src emacs-lisp :tangle yes
 (setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode))
