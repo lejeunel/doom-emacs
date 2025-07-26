@@ -1,5 +1,5 @@
 (map! :leader
-    :desc "Kill buffer" "x" #'kill-this-buffer
+    :desc "Kill buffer" "x" #'kill-current-buffer
     :desc "Switch buffer (Persp.)" "." #'persp-switch-to-buffer
     :desc "Switch buffer" ">" #'switch-to-buffer
     :desc "Expand region" "e" #'er/expand-region
