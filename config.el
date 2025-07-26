@@ -27,7 +27,7 @@
 ;; set `doom-theme'
 (setq doom-theme 'doom-gruvbox-material) ; dark variant
 
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :height 1.0 :weight 'normal))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
 
 (setq highlight-indent-guides-auto-odd-face-perc 50)
