@@ -1,5 +1,5 @@
 (map! :leader
-    :desc "Kill buffer" "x" #'kill-this-buffer
+    :desc "Kill buffer" "x" #'kill-current-buffer
     :desc "Switch buffer (Persp.)" "." #'persp-switch-to-buffer
     :desc "Switch buffer" ">" #'switch-to-buffer
     :desc "Expand region" "e" #'er/expand-region
@@ -27,7 +27,7 @@
 ;; set `doom-theme'
 (setq doom-theme 'doom-gruvbox-material) ; dark variant
 
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :height 1.0 :weight 'normal))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
 
 (setq highlight-indent-guides-auto-odd-face-perc 50)
