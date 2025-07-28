@@ -166,13 +166,13 @@
     :server-id 'ruff-lsp
     :add-on? t))) ;; <-- important! allows both Pyright + Ruff
 
-(after! python
-  (setq +format-with-lsp nil) ;; disable LSP formatting if any
-  (add-hook 'before-save-hook
-            (lambda ()
-              (when (eq major-mode 'python-mode)
-                (call-process "ruff" nil nil nil "format" (buffer-file-name)))
-              nil)))
+;; (after! python
+;;   (setq +format-with-lsp nil) ;; disable LSP formatting if any
+;;   (add-hook 'before-save-hook
+;;             (lambda ()
+;;               (when (eq major-mode 'python-mode)
+;;                 (call-process "ruff" nil nil nil "format" (buffer-file-name)))
+;;               nil)))
 
 (setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode))
 

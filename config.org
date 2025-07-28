@@ -282,13 +282,13 @@ Enable pyright and ruff LSP servers for python-mode
 
 Format using ruff before save
 #+begin_src emacs-lisp :tangle yes
-(after! python
-  (setq +format-with-lsp nil) ;; disable LSP formatting if any
-  (add-hook 'before-save-hook
-            (lambda ()
-              (when (eq major-mode 'python-mode)
-                (call-process "ruff" nil nil nil "format" (buffer-file-name)))
-              nil)))
+;; (after! python
+;;   (setq +format-with-lsp nil) ;; disable LSP formatting if any
+;;   (add-hook 'before-save-hook
+;;             (lambda ()
+;;               (when (eq major-mode 'python-mode)
+;;                 (call-process "ruff" nil nil nil "format" (buffer-file-name)))
+;;               nil)))
 #+end_src
 
 * Docker
