@@ -22,7 +22,8 @@ hence this personal config file is pretty minimal in itself.
     :desc "Previous buffer" "j" #'previous-buffer
     :desc "Search buffer" "/" #'+default/search-buffer
     :desc "Search buffer" "ps" #'+default/search-project
-    :desc "Switch window" "TAB" #'ace-window)
+    :desc "Switch window" "TAB" #'ace-window
+    :desc "Open URL" "gx" #'browse-url-at-point)
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -509,13 +510,27 @@ Enable tree-sitter syntax highlighting for all languages.
 
 * Notmuch
 
+Set saved searches
 #+begin_src emacs-lisp :tangle yes
 (setq notmuch-saved-searches
     '((:name "inbox" :query "tag:Gmail/Inbox OR tag:Gandi/Inbox" :key "i")
-        (:name "unread" :query "tag:unread" :key "u")
-        ;; Add your other searches here
-        ))
+      (:name "unread" :query "tag:unread" :key "u")
+      (:name "gmail" :query "tag:Gmail/Inbox" :key "g")
+      (:name "personal" :query "tag:Gandi/Inbox" :key "p")))
 (setq +notmuch-mail-folder "~/.mail")
 (setq +notmuch-sync-backend 'mbsync)
 (setq +notmuch-home-function (lambda () (notmuch-search "tag:Gmail/Inbox OR tag:Gandi/Inbox")))
+(setq notmuch-always-prompt-for-sender t)
+(setq user-full-name "Laurent Lejeune")
+(setq user-mail-address "me@lejeunel.org")
+(setq mail-host-address "lejeunel.org")
+#+end_src
+
+Use xdg-open to open attachments.
+#+begin_src emacs-lisp :tangle yes
+(after! notmuch
+  (setq notmuch-show-part-action-list
+        '(("Open with xdg-open" . (lambda (part) (start-process "xdg-open" nil "xdg-open" (notmuch-show-get-filename part))))
+          ("View" . notmuch-show-view-part)
+          ("Save" . notmuch-show-save-part))))
 #+end_src

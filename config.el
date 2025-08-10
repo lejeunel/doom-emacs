@@ -9,7 +9,8 @@
     :desc "Previous buffer" "j" #'previous-buffer
     :desc "Search buffer" "/" #'+default/search-buffer
     :desc "Search buffer" "ps" #'+default/search-project
-    :desc "Switch window" "TAB" #'ace-window)
+    :desc "Switch window" "TAB" #'ace-window
+    :desc "Open URL" "gx" #'browse-url-at-point)
 
 (define-key evil-normal-state-map (kbd "H") 'centaur-tabs-backward)
 (define-key evil-normal-state-map (kbd "L") 'centaur-tabs-forward)
@@ -322,9 +323,19 @@ background of code to whatever theme I'm using's background"
 
 (setq notmuch-saved-searches
     '((:name "inbox" :query "tag:Gmail/Inbox OR tag:Gandi/Inbox" :key "i")
-        (:name "unread" :query "tag:unread" :key "u")
-        ;; Add your other searches here
-        ))
+      (:name "unread" :query "tag:unread" :key "u")
+      (:name "gmail" :query "tag:Gmail/Inbox" :key "g")
+      (:name "personal" :query "tag:Gandi/Inbox" :key "p")))
 (setq +notmuch-mail-folder "~/.mail")
 (setq +notmuch-sync-backend 'mbsync)
 (setq +notmuch-home-function (lambda () (notmuch-search "tag:Gmail/Inbox OR tag:Gandi/Inbox")))
+(setq notmuch-always-prompt-for-sender t)
+(setq user-full-name "Laurent Lejeune")
+(setq user-mail-address "me@lejeunel.org")
+(setq mail-host-address "lejeunel.org")
+
+(after! notmuch
+  (setq notmuch-show-part-action-list
+        '(("Open with xdg-open" . (lambda (part) (start-process "xdg-open" nil "xdg-open" (notmuch-show-get-filename part))))
+          ("View" . notmuch-show-view-part)
+          ("Save" . notmuch-show-save-part))))
