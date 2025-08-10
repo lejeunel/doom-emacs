@@ -322,7 +322,7 @@ background of code to whatever theme I'm using's background"
 (map! :nvi "C-f" #'tmux-sessionizer)
 
 (setq notmuch-saved-searches
-    '((:name "inbox" :query "tag:Gmail/Inbox OR tag:Gandi/Inbox" :key "i")
+    '((:name "inbox" :query "(tag:Gmail/Inbox OR tag:Gandi/Inbox) AND not tag:deleted" :key "i")
       (:name "unread" :query "tag:unread" :key "u")
       (:name "gmail" :query "tag:Gmail/Inbox" :key "g")
       (:name "personal" :query "tag:Gandi/Inbox" :key "p")))
@@ -339,3 +339,7 @@ background of code to whatever theme I'm using's background"
         '(("Open with xdg-open" . (lambda (part) (start-process "xdg-open" nil "xdg-open" (notmuch-show-get-filename part))))
           ("View" . notmuch-show-view-part)
           ("Save" . notmuch-show-save-part))))
+
+(setq mail-specify-envelope-from t)
+(setq message-sendmail-envelope-from 'header)
+(setq mail-envelope-from 'header)
