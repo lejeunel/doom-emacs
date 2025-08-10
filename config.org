@@ -496,6 +496,7 @@ Enable tree-sitter syntax highlighting for all languages.
 #+begin_src emacs-lisp :tangle yes
 (setq confirm-kill-emacs nil)
 #+end_src
+
 * TMUX
 
 #+begin_src emacs-lisp :tangle yes
@@ -504,4 +505,17 @@ Enable tree-sitter syntax highlighting for all languages.
   (with-current-buffer
       (shell-command "tmux neww tmux-sessionizer")))
 (map! :nvi "C-f" #'tmux-sessionizer)
+#+end_src
+
+* Notmuch
+
+#+begin_src emacs-lisp :tangle yes
+(setq notmuch-saved-searches
+    '((:name "inbox" :query "tag:Gmail/Inbox OR tag:Gandi/Inbox" :key "i")
+        (:name "unread" :query "tag:unread" :key "u")
+        ;; Add your other searches here
+        ))
+(setq +notmuch-mail-folder "~/.mail")
+(setq +notmuch-sync-backend 'mbsync)
+(setq +notmuch-home-function (lambda () (notmuch-search "tag:Gmail/Inbox OR tag:Gandi/Inbox")))
 #+end_src

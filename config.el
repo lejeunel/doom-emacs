@@ -319,3 +319,12 @@ background of code to whatever theme I'm using's background"
   (with-current-buffer
       (shell-command "tmux neww tmux-sessionizer")))
 (map! :nvi "C-f" #'tmux-sessionizer)
+
+(setq notmuch-saved-searches
+    '((:name "inbox" :query "tag:Gmail/Inbox OR tag:Gandi/Inbox" :key "i")
+        (:name "unread" :query "tag:unread" :key "u")
+        ;; Add your other searches here
+        ))
+(setq +notmuch-mail-folder "~/.mail")
+(setq +notmuch-sync-backend 'mbsync)
+(setq +notmuch-home-function (lambda () (notmuch-search "tag:Gmail/Inbox OR tag:Gandi/Inbox")))
