@@ -321,14 +321,16 @@ background of code to whatever theme I'm using's background"
       (shell-command "tmux neww tmux-sessionizer")))
 (map! :nvi "C-f" #'tmux-sessionizer)
 
+(setq ll/notmuch-default-query "tag:inbox AND not tag:deleted AND date:3months..")
 (setq notmuch-saved-searches
-    '((:name "inbox" :query "(tag:Gmail/Inbox OR tag:Gandi/Inbox) AND not tag:deleted" :key "i")
-      (:name "unread" :query "tag:unread" :key "u")
-      (:name "gmail" :query "tag:Gmail/Inbox" :key "g")
-      (:name "personal" :query "tag:Gandi/Inbox" :key "p")))
+    `((:name "inbox" :query ,ll/notmuch-default-query :key "i")
+      (:name "sent" :query "tag:sent AND not tag:deleted")
+      (:name "gmail" :query "tag:Gmail/Inbox AND not tag:deleted" :key "g")
+      (:name "personal" :query "tag:Gandi/Inbox AND not tag:deleted" :key "p")))
 (setq +notmuch-mail-folder "~/.mail")
 (setq +notmuch-sync-backend 'mbsync)
-(setq +notmuch-home-function (lambda () (notmuch-search "tag:Gmail/Inbox OR tag:Gandi/Inbox")))
+(setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
+
 (setq notmuch-always-prompt-for-sender t)
 (setq user-full-name "Laurent Lejeune")
 (setq user-mail-address "me@lejeunel.org")

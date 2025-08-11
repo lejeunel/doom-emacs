@@ -162,9 +162,7 @@
        ;;web               ; the tubes
 
        :email
-       ;;(mu4e +gmail)
-       notmuch
-       +org
+       (notmuch +org +afew)
        ;;(wanderlust +gmail)
 
        :app
