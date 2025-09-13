@@ -323,13 +323,23 @@ background of code to whatever theme I'm using's background"
 
 (setq ll/notmuch-default-query "tag:inbox AND not tag:deleted AND date:3months..")
 (setq notmuch-saved-searches
-    `((:name "inbox" :query ,ll/notmuch-default-query :key "i")
-      (:name "sent" :query "tag:sent AND not tag:deleted")
-      (:name "gmail" :query "tag:Gmail/Inbox AND not tag:deleted" :key "g")
-      (:name "personal" :query "tag:Gandi/Inbox AND not tag:deleted" :key "p")))
+    `((:name "inbox"
+       :query ,ll/notmuch-default-query
+       :key "i"
+       :search-type: tree)
+      (:name "sent"
+       :query "tag:sent AND not tag:deleted")
+      (:name "gmail"
+       :query "tag:Gmail/Inbox AND not tag:deleted"
+       :key "g"
+       :search-type: tree)
+      (:name "personal"
+       :query "tag:Gandi/Inbox AND not tag:deleted"
+       :key "p"
+       :search-type tree)))
 (setq +notmuch-mail-folder "~/.mail")
 (setq +notmuch-sync-backend 'mbsync)
-(setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
+(setq +notmuch-home-function (lambda () (notmuch-tree ll/notmuch-default-query)))
 
 (setq notmuch-always-prompt-for-sender t)
 (setq user-full-name "Laurent Lejeune")
@@ -345,3 +355,12 @@ background of code to whatever theme I'm using's background"
 (setq mail-specify-envelope-from t)
 (setq message-sendmail-envelope-from 'header)
 (setq mail-envelope-from 'header)
+
+(setq message-make-forward-subject-function 'message-forward-subject-fwd)
+
+(defun my-notmuch-mua-empty-subject-check ()
+  "Request confirmation before sending a message with empty subject"
+  (when (and (null (message-field-value "Subject"))
+             (not (y-or-n-p "Subject is empty, send anyway? ")))
+    (error "Sending message cancelled: empty subject.")))
+(add-hook 'message-send-hook 'my-notmuch-mua-empty-subject-check)

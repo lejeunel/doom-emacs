@@ -509,20 +509,41 @@ Enable tree-sitter syntax highlighting for all languages.
 
 * Notmuch
 
-Set saved searches
+** Cheatsheet
+
+*** Autocomplete addresses
+By default, notmuch uses ~notmuch address~ to fetch all email addresses parsed until now.
+Use ~<TAB>~ when writing an address in the "To" field to auto-complete.
+
+*** Forwarding
+Open email you want to forward and press ~c f~.
+
+** Saved Searches
+
 #+begin_src emacs-lisp :tangle yes
 (setq ll/notmuch-default-query "tag:inbox AND not tag:deleted AND date:3months..")
 (setq notmuch-saved-searches
-    `((:name "inbox" :query ,ll/notmuch-default-query :key "i")
-      (:name "sent" :query "tag:sent AND not tag:deleted")
-      (:name "gmail" :query "tag:Gmail/Inbox AND not tag:deleted" :key "g")
-      (:name "personal" :query "tag:Gandi/Inbox AND not tag:deleted" :key "p")))
+    `((:name "inbox"
+       :query ,ll/notmuch-default-query
+       :key "i"
+       :search-type: tree)
+      (:name "sent"
+       :query "tag:sent AND not tag:deleted")
+      (:name "gmail"
+       :query "tag:Gmail/Inbox AND not tag:deleted"
+       :key "g"
+       :search-type: tree)
+      (:name "personal"
+       :query "tag:Gandi/Inbox AND not tag:deleted"
+       :key "p"
+       :search-type tree)))
 (setq +notmuch-mail-folder "~/.mail")
 (setq +notmuch-sync-backend 'mbsync)
-(setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
+(setq +notmuch-home-function (lambda () (notmuch-tree ll/notmuch-default-query)))
 #+end_src
 
-My identity.
+** My Identity
+
 #+begin_src emacs-lisp :tangle yes
 (setq notmuch-always-prompt-for-sender t)
 (setq user-full-name "Laurent Lejeune")
@@ -530,6 +551,7 @@ My identity.
 (setq mail-host-address "lejeunel.org")
 #+end_src
 
+** External Viewer
 Use xdg-open to open attachments.
 #+begin_src emacs-lisp :tangle yes
 (after! notmuch
@@ -538,6 +560,8 @@ Use xdg-open to open attachments.
           ("View" . notmuch-show-view-part)
           ("Save" . notmuch-show-save-part))))
 #+end_src
+
+** MSMTP
 
 If msmtp is passed the envelope address on the command line
 it will automatically pick the matching account.
@@ -549,4 +573,26 @@ and it's a little confusing, but setting these three works for me:
 (setq mail-specify-envelope-from t)
 (setq message-sendmail-envelope-from 'header)
 (setq mail-envelope-from 'header)
+#+end_src
+
+** Forwarding
+
+This sets default "forward-to" subject. We simply preprend "Fwd: " to
+the original subject.
+
+#+begin_src emacs-lisp :tangle yes
+(setq message-make-forward-subject-function 'message-forward-subject-fwd)
+#+end_src
+
+** Avoid Empty Subjects
+
+This asks for a confirmation when sending an email with an empty subject.
+
+#+begin_src emacs-lisp :tangle yes
+(defun my-notmuch-mua-empty-subject-check ()
+  "Request confirmation before sending a message with empty subject"
+  (when (and (null (message-field-value "Subject"))
+             (not (y-or-n-p "Subject is empty, send anyway? ")))
+    (error "Sending message cancelled: empty subject.")))
+(add-hook 'message-send-hook 'my-notmuch-mua-empty-subject-check)
 #+end_src
