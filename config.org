@@ -292,6 +292,8 @@ Format using ruff before save
 #+end_src
 
 * Docker
+Disable format-on-save in docker-mode.
+This is acting funny when dealing with ~FROM~ instructions.
 #+begin_src emacs-lisp :tangle yes
 (setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode))
 #+end_src
@@ -299,7 +301,7 @@ Format using ruff before save
 #+begin_src emacs-lisp :tangle yes
 (setq lsp-go-use-gofumpt t)
 #+end_src
-* Harpoon.el
+* Harpoon
 #+begin_src emacs-lisp :tangle yes
 (map! :leader
       (:prefix-map ("r" . "Harpoon")
@@ -539,7 +541,7 @@ Open email you want to forward and press ~c f~.
        :search-type tree)))
 (setq +notmuch-mail-folder "~/.mail")
 (setq +notmuch-sync-backend 'mbsync)
-(setq +notmuch-home-function (lambda () (notmuch-tree ll/notmuch-default-query)))
+(setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
 #+end_src
 
 ** My Identity

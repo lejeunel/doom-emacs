@@ -339,7 +339,7 @@ background of code to whatever theme I'm using's background"
        :search-type tree)))
 (setq +notmuch-mail-folder "~/.mail")
 (setq +notmuch-sync-backend 'mbsync)
-(setq +notmuch-home-function (lambda () (notmuch-tree ll/notmuch-default-query)))
+(setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
 
 (setq notmuch-always-prompt-for-sender t)
 (setq user-full-name "Laurent Lejeune")
