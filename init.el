@@ -77,8 +77,8 @@
 
        :checkers
        (syntax +childframe)              ; tasing you for every semicolon you forget
-       ;;spell             ; tasing you for misspelling mispelling
-       grammar           ; tasing grammar mistake every you make
+       (spell +childframe)             ; tasing you for misspelling mispelling
+       (grammar +chilframe)           ; tasing grammar mistake every you make
 
        :tools
        tree-sitter

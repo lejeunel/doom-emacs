@@ -39,14 +39,6 @@
 
 (setq display-line-numbers-type 'relative)
 
-(custom-theme-set-faces!
-    'doom-dracula
-        '(org-level-4 :inherit outline-4 :height 1.0)
-        '(org-level-3 :inherit outline-3 :height 1.1)
-        '(org-level-2 :inherit outline-2 :height 1.3)
-        '(org-level-1 :inherit outline-1 :height 1.5)
-        '(org-document-title :height 1.5 :underline nil))
-
 (setq org-hide-emphasis-markers t)
 
 (use-package! org-appear
@@ -151,29 +143,6 @@
 (map! :localleader
       :map python-mode-map
       :desc "Auto docstring"  "s" 'numpydoc-generate)
-
-(after! lsp-mode
-  ;; Ensure python-mode uses lsp
-  (add-hook 'python-mode-hook #'lsp)
-
-  ;; Prevent doom from disabling one or the other
-  (setq lsp-disabled-clients '())
-
-  ;; Register ruff-lsp as an additional client
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection (lsp-stdio-connection '("ruff lsp"))
-    :major-modes '(python-mode)
-    :server-id 'ruff-lsp
-    :add-on? t))) ;; <-- important! allows both Pyright + Ruff
-
-;; (after! python
-;;   (setq +format-with-lsp nil) ;; disable LSP formatting if any
-;;   (add-hook 'before-save-hook
-;;             (lambda ()
-;;               (when (eq major-mode 'python-mode)
-;;                 (call-process "ruff" nil nil nil "format" (buffer-file-name)))
-;;               nil)))
 
 (setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode))
 
