@@ -50,7 +50,7 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
                                         ;(package! builtin-package :recipe (:branch "develop"))
 
-(package! iflipb)
+;; (package! iflipb)
 (package! org-ref)
 (package! py-yapf)
 (package! typopunct)
@@ -65,7 +65,7 @@
 (package! org-appear
   :recipe (:host github
            :repo "awth13/org-appear"))
-(package! org-reveal)
-(package! ox-reveal)
-(package! catppuccin-theme)
+;; (package! org-reveal)
+;; (package! ox-reveal)
+;; (package! catppuccin-theme)
 (package! templ-ts-mode)

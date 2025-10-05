@@ -162,11 +162,8 @@
 
 (setq org-export-use-babel t)
 (setq org-directory "~/org/")
-(load-library "ox-reveal")
 (setq org-latex-pdf-process '("tectonic %f"))
 (setq org-export-in-background t)
-
-(add-to-list 'org-file-apps '("\\.pdf\\'" . "zathura %s"))
 
 (use-package! org-auto-tangle
   :defer t

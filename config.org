@@ -272,14 +272,8 @@ This is acting funny when dealing with ~FROM~ instructions.
 #+begin_src emacs-lisp :tangle yes
 (setq org-export-use-babel t)
 (setq org-directory "~/org/")
-(load-library "ox-reveal")
 (setq org-latex-pdf-process '("tectonic %f"))
 (setq org-export-in-background t)
-#+end_src
-
-Set PDF viewer.
-#+begin_src emacs-lisp :tangle yes
-(add-to-list 'org-file-apps '("\\.pdf\\'" . "zathura %s"))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
