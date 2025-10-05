@@ -12,9 +12,6 @@
     :desc "Switch window" "TAB" #'ace-window
     :desc "Open URL" "gx" #'browse-url-at-point)
 
-(define-key evil-normal-state-map (kbd "H") 'centaur-tabs-backward)
-(define-key evil-normal-state-map (kbd "L") 'centaur-tabs-forward)
-
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
 
@@ -34,7 +31,6 @@
 (setq highlight-indent-guides-auto-odd-face-perc 50)
 (setq highlight-indent-guides-auto-even-face-perc 50)
 (setq highlight-indent-guides-auto-character-face-perc 50)
-;; (setq highlight-indent-guides-method 'character)
 (setq highlight-indent-guides-responsive 'top)
 
 (setq display-line-numbers-type 'relative)
