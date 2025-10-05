@@ -85,12 +85,16 @@ Force company to use fixed-pitch font
   (company-tooltip
    ((t (:family "JetBrainsMono Nerd Font" :height 1.0))))
   :config
-        (define-key evil-insert-state-map (kbd "C-l") 'company-complete)
+        (define-key evil-insert-state-map (kbd "C-y") 'company-complete)
         (setq company-idle-delay 0.1)
         (setq company-tooltip-idle-delay 0.1)
         (add-to-list '+lsp-company-backends 'company-files)
         (set-company-backend! 'org-mode 'company-files 'company-capf)
 )
+(with-eval-after-load 'company
+  ;; Unbind RET so it does not complete
+  (define-key company-active-map (kbd "RET") nil)
+  (define-key company-active-map (kbd "<return>") nil))
 #+end_src
 
 * LaTeX
