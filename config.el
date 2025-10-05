@@ -103,8 +103,6 @@
 (setq python-shell-interpreter "ipython"
     python-shell-interpreter-args "-i --simple-prompt")
 
-(add-hook 'python-mode-hook #'(lambda () (setq flycheck-checker 'python-pylint)))
-
 (defvar python--pdb-breakpoint-string "breakpoint()")
 (defun python-add-breakpoint ()
 "Inserts a python breakpoint using `pdb'"
