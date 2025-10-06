@@ -127,10 +127,10 @@
     "Adds a highlighter for use by `python--pdb-breakpoint-string'"
     (interactive)
     (python-set-debug-highlight))
-    (add-hook 'python-mode-hook 'python-add-debug-highlight)
+    (add-hook 'python-ts-mode-hook 'python-add-debug-highlight)
 
 (map! :localleader
-      :map python-mode-map
+      :map python-ts-mode-map
       :desc "Insert breakpoint"    "d" 'python-add-breakpoint)
 
 (use-package! numpydoc
