@@ -209,7 +209,6 @@ Bindings and functions to add and highlight breakpoints.
     (insert python--pdb-breakpoint-string)
     (python-set-debug-highlight))
 
-
 (defun python-set-debug-highlight ()
     (interactive)
     (highlight-lines-matching-regexp "breakpoint[.]?" 'hi-red-b))
@@ -542,3 +541,4 @@ This asks for a confirmation when sending an email with an empty subject.
     (error "Sending message cancelled: empty subject.")))
 (add-hook 'message-send-hook 'my-notmuch-mua-empty-subject-check)
 #+end_src
+

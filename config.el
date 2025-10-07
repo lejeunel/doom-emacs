@@ -118,7 +118,6 @@
     (insert python--pdb-breakpoint-string)
     (python-set-debug-highlight))
 
-
 (defun python-set-debug-highlight ()
     (interactive)
     (highlight-lines-matching-regexp "breakpoint[.]?" 'hi-red-b))
