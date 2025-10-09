@@ -70,15 +70,15 @@
        undo
 
        :term
-       eshell            ; a consistent, cross-platform shell (WIP)
+       ;; eshell            ; a consistent, cross-platform shell (WIP)
        ;;shell             ; a terminal REPL for Emacs
        ;;term              ; terminals in Emacs
-       ;; vterm             ; another terminals in Emacs
+       vterm             ; another terminals in Emacs
 
        :checkers
        (syntax +childframe)              ; tasing you for every semicolon you forget
-       (spell +childframe)             ; tasing you for misspelling mispelling
-       (grammar +chilframe)           ; tasing grammar mistake every you make
+       ;; (spell +childframe)             ; tasing you for misspelling mispelling
+       ;; (grammar +chilframe)           ; tasing grammar mistake every you make
 
        :tools
        tree-sitter

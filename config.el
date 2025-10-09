@@ -10,10 +10,17 @@
     :desc "Search buffer" "/" #'+default/search-buffer
     :desc "Search buffer" "ps" #'+default/search-project
     :desc "Switch window" "TAB" #'ace-window
+    :desc "Toggle last popup" "l" #'+popup/toggle
+    :desc "Switch workspace" "," #'+workspace/switch-to
+    :desc "New named workspace" "ww" #'+workspace/new-named
     :desc "Open URL" "gx" #'browse-url-at-point)
 
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
+(define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+(define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+(define-key evil-insert-state-map (kbd "C-l") 'evil-window-right)
+(define-key evil-insert-state-map (kbd "C-h") 'evil-window-left)
 
 (define-key evil-visual-state-map (kbd "K") 'drag-stuff-up)
 (define-key evil-visual-state-map (kbd "J") 'drag-stuff-down)
@@ -327,3 +334,7 @@ background of code to whatever theme I'm using's background"
              (not (y-or-n-p "Subject is empty, send anyway? ")))
     (error "Sending message cancelled: empty subject.")))
 (add-hook 'message-send-hook 'my-notmuch-mua-empty-subject-check)
+
+(after! vterm
+  (set-popup-rule! "*doom:vterm-popup:.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right)
+  )

@@ -22,6 +22,9 @@ hence this personal config file is pretty minimal in itself.
     :desc "Search buffer" "/" #'+default/search-buffer
     :desc "Search buffer" "ps" #'+default/search-project
     :desc "Switch window" "TAB" #'ace-window
+    :desc "Toggle last popup" "l" #'+popup/toggle
+    :desc "Switch workspace" "," #'+workspace/switch-to
+    :desc "New named workspace" "ww" #'+workspace/new-named
     :desc "Open URL" "gx" #'browse-url-at-point)
 #+end_src
 
@@ -30,6 +33,23 @@ We reset these here:
 #+begin_src emacs-lisp :tangle yes
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
+(define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+(define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+(define-key evil-insert-state-map (kbd "C-l") 'evil-window-right)
+(define-key evil-insert-state-map (kbd "C-h") 'evil-window-left)
+#+end_src
+
+* Window Management
+
+#+begin_src emacs-lisp :tanle yes
+(defun toggle-maximize-window ()
+  "Maximize or restore the current window."
+  (interactive)
+  (if (= 1 (length (window-list)))
+      (winner-undo)          ;; Restore previous layout if only one window
+    (delete-other-windows)))  ;; Maximize current window
+
+(define-key evil-normal-state-map (kbd "C-SPC") 'toggle-maximize-window)
 #+end_src
 
 Function that allow to move around selections:
@@ -542,3 +562,10 @@ This asks for a confirmation when sending an email with an empty subject.
 (add-hook 'message-send-hook 'my-notmuch-mua-empty-subject-check)
 #+end_src
 
+
+* VTerm
+#+begin_src emacs-lisp :tangle yes
+(after! vterm
+  (set-popup-rule! "*doom:vterm-popup:.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right)
+  )
+#+end_src
