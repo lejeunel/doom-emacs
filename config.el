@@ -1,6 +1,5 @@
 (map! :leader
     :desc "Kill buffer" "x" #'kill-current-buffer
-    :desc "Switch buffer (Persp.)" "." #'persp-switch-to-buffer
     :desc "Switch buffer" ">" #'switch-to-buffer
     :desc "Expand region" "e" #'er/expand-region
     :desc "Increase font size" "+" #'doom/increase-font-size
@@ -10,7 +9,6 @@
     :desc "Search buffer" "/" #'+default/search-buffer
     :desc "Search buffer" "ps" #'+default/search-project
     :desc "Switch window" "TAB" #'ace-window
-    :desc "Toggle vterm" "v" #'+vterm/toggle
     :desc "Open URL" "gx" #'browse-url-at-point)
 
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
@@ -21,11 +19,11 @@
 (define-key evil-insert-state-map (kbd "C-h") 'evil-window-left)
 
 (defun toggle-maximize-window ()
-  "Maximize or restore the current window."
+ "Maximize the window or bring back the previous layout."
   (interactive)
-  (if (= 1 (length (window-list)))
-      (winner-undo)          ;; Restore previous layout if only one window
-    (delete-other-windows)))  ;; Maximize current window
+  (if (one-window-p)
+    (winner-undo)
+    (delete-other-windows)))
 
 (define-key evil-normal-state-map (kbd "C-SPC") 'toggle-maximize-window)
 
@@ -343,8 +341,9 @@ background of code to whatever theme I'm using's background"
 (add-hook 'message-send-hook 'my-notmuch-mua-empty-subject-check)
 
 (after! vterm
-  (set-popup-rule! "*doom:vterm-popup:.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right)
-  )
+  (set-popup-rule! "*doom:vterm-popup:.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
+(map! :leader
+    :desc "Toggle vterm" "v" #'+vterm/toggle)
 
 ;; Define a comma-leader only for motion states (normal, visual, operator)
 (general-create-definer comma-leader-def
@@ -355,4 +354,5 @@ background of code to whatever theme I'm using's background"
 (comma-leader-def
     :desc "Switch workspace" "," #'+workspace/switch-to
     :desc "Rename workspace" "r" #'+workspace/rename
+    :desc "Kill workspace" "k" #'+workspace/kill
     :desc "New named workspace" "n" #'+workspace/new-named)
