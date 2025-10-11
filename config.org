@@ -22,9 +22,7 @@ hence this personal config file is pretty minimal in itself.
     :desc "Search buffer" "/" #'+default/search-buffer
     :desc "Search buffer" "ps" #'+default/search-project
     :desc "Switch window" "TAB" #'ace-window
-    :desc "Toggle last popup" "l" #'+popup/toggle
-    :desc "Switch workspace" "," #'+workspace/switch-to
-    :desc "New named workspace" "ww" #'+workspace/new-named
+    :desc "Toggle vterm" "v" #'+vterm/toggle
     :desc "Open URL" "gx" #'browse-url-at-point)
 #+end_src
 
@@ -568,4 +566,19 @@ This asks for a confirmation when sending an email with an empty subject.
 (after! vterm
   (set-popup-rule! "*doom:vterm-popup:.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right)
   )
+#+end_src
+
+* Workspaces
+
+#+begin_src emacs-lisp :tangle yes
+;; Define a comma-leader only for motion states (normal, visual, operator)
+(general-create-definer comma-leader-def
+  :states '(normal)
+  :prefix ",")
+
+;; Bind commands under the comma prefix
+(comma-leader-def
+    :desc "Switch workspace" "," #'+workspace/switch-to
+    :desc "Rename workspace" "r" #'+workspace/rename
+    :desc "New named workspace" "n" #'+workspace/new-named)
 #+end_src
