@@ -306,6 +306,12 @@ This is acting funny when dealing with ~FROM~ instructions.
   (setq org-auto-tangle-default t))
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes
+(map! :leader
+      :map org-mode-map
+      :desc "Preview LaTeX" "mu" 'org-latex-preview)
+#+end_src
+
 ** Backends/Exporters
 
 A couple custom LaTeX classes.
