@@ -86,7 +86,8 @@ Hide emphasis markups mark.
 (setq org-hide-emphasis-markers t)
 #+end_src
 
-Show emphasis marker when cursor is on region.
+Automatically show/hide org elements when cursor is
+placed on them, e.g. will hide/show links.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package! org-appear
