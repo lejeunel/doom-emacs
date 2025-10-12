@@ -4,6 +4,8 @@
 
 * Introduction
 
+$x=1$
+
 This uses the [[https://github.com/doomemacs/doomemacs][doom-emacs]] configuration framework which provides sane defaults,
 hence this personal config file is pretty minimal in itself.
 
@@ -62,13 +64,7 @@ Function that allow to move around selections:
 * Appearance
 Colors and fonts
 #+begin_src emacs-lisp :tangle yes
-;; `gruvbox-material' contrast and palette options
-;; (setq doom-gruvbox-material-background  "medium"  ; or hard (defaults to soft)
-;;      doom-gruvbox-material-palette     "original") ; or original (defaults to material)
-
-;; set `doom-theme'
 (setq doom-theme 'doom-gruvbox-material) ; dark variant
-
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
 #+end_src
@@ -447,30 +443,9 @@ background of code to whatever theme I'm using's background"
   (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
-(after! iflipb
-  (setq iflipb-ignore-buffers "$^")
-  )
-#+end_src
-
-Enable tree-sitter syntax highlighting for all languages.
-
-#+begin_src emacs-lisp :tangle yes
-(setq +tree-sitter-hl-enabled-modes t)
-#+end_src
 
 #+begin_src emacs-lisp :tangle yes
 (setq confirm-kill-emacs nil)
-#+end_src
-
-* TMUX
-
-#+begin_src emacs-lisp :tangle yes
-(defun tmux-sessionizer ()
-  (interactive)
-  (with-current-buffer
-      (shell-command "tmux neww tmux-sessionizer")))
-(map! :nvi "C-f" #'tmux-sessionizer)
 #+end_src
 
 * Notmuch
