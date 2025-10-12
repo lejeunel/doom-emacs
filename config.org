@@ -255,7 +255,7 @@ with [[https://github.com/douglasdavis/numpydoc.el][numpydoc.el]].
   (setq numpydoc-insertion-style 'yas))
 
 (map! :localleader
-      :map python-mode-map
+      :map python-ts-mode-map
       :desc "Auto docstring"  "s" 'numpydoc-generate)
 #+end_src
 

@@ -13,8 +13,10 @@
 
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
+
 (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+
 (define-key evil-insert-state-map (kbd "C-l") 'evil-window-right)
 (define-key evil-insert-state-map (kbd "C-h") 'evil-window-left)
 
@@ -30,13 +32,7 @@
 (define-key evil-visual-state-map (kbd "K") 'drag-stuff-up)
 (define-key evil-visual-state-map (kbd "J") 'drag-stuff-down)
 
-;; `gruvbox-material' contrast and palette options
-;; (setq doom-gruvbox-material-background  "medium"  ; or hard (defaults to soft)
-;;      doom-gruvbox-material-palette     "original") ; or original (defaults to material)
-
-;; set `doom-theme'
 (setq doom-theme 'doom-gruvbox-material) ; dark variant
-
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
 
@@ -150,7 +146,7 @@
   (setq numpydoc-insertion-style 'yas))
 
 (map! :localleader
-      :map python-mode-map
+      :map python-ts-mode-map
       :desc "Auto docstring"  "s" 'numpydoc-generate)
 
 (setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode))
@@ -185,6 +181,10 @@
   :hook (org-mode . org-auto-tangle-mode)
   :config
   (setq org-auto-tangle-default t))
+
+(map! :leader
+      :map org-mode-map
+      :desc "Preview LaTeX" "mu" 'org-latex-preview)
 
 (after! ox-latex
     (add-to-list 'org-latex-classes
@@ -282,39 +282,32 @@ background of code to whatever theme I'm using's background"
 (after! counsel
   (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
 
-(after! iflipb
-  (setq iflipb-ignore-buffers "$^")
-  )
-
-(setq +tree-sitter-hl-enabled-modes t)
-
 (setq confirm-kill-emacs nil)
 
-(defun tmux-sessionizer ()
-  (interactive)
-  (with-current-buffer
-      (shell-command "tmux neww tmux-sessionizer")))
-(map! :nvi "C-f" #'tmux-sessionizer)
-
 (setq ll/notmuch-default-query "tag:inbox AND not tag:deleted AND date:3months..")
-(setq notmuch-saved-searches
-    `((:name "inbox"
-       :query ,ll/notmuch-default-query
-       :key "i"
-       :search-type: tree)
-      (:name "sent"
-       :query "tag:sent AND not tag:deleted")
-      (:name "gmail"
-       :query "tag:Gmail/Inbox AND not tag:deleted"
-       :key "g"
-       :search-type: tree)
-      (:name "personal"
-       :query "tag:Gandi/Inbox AND not tag:deleted"
-       :key "p"
-       :search-type tree)))
-(setq +notmuch-mail-folder "~/.mail")
-(setq +notmuch-sync-backend 'mbsync)
-(setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
+(after! notmuch
+    (setq notmuch-saved-searches
+        `((:name "inbox"
+        :query ,ll/notmuch-default-query
+        :key "i"
+        :search-type: tree)
+        (:name "sent"
+        :query "tag:sent AND not tag:deleted")
+        (:name "gmail"
+        :query "tag:Gmail/Inbox AND not tag:deleted"
+        :key "g"
+        :search-type: tree)
+        (:name "personal"
+        :query "tag:Gandi/Inbox AND not tag:deleted"
+        :key "p"
+        :search-type tree)))
+    (setq +notmuch-mail-folder "~/.mail")
+    (setq +notmuch-sync-backend 'mbsync)
+    (setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
+    
+    (map! :leader
+        :map notmuch-mode-map
+        :desc "Saved searches" "mj" 'notmuch-jump-search))
 
 (setq notmuch-always-prompt-for-sender t)
 (setq user-full-name "Laurent Lejeune")
@@ -341,11 +334,10 @@ background of code to whatever theme I'm using's background"
 (add-hook 'message-send-hook 'my-notmuch-mua-empty-subject-check)
 
 (after! vterm
-  (set-popup-rule! "*doom:vterm-popup:.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
+  (set-popup-rule! "^.*vterm.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
 (map! :leader
-    :desc "Toggle vterm" "v" #'+vterm/toggle)
+    :desc "Open vterm" "v" #'+vterm/here)
 
-;; Define a comma-leader only for motion states (normal, visual, operator)
 (general-create-definer comma-leader-def
   :states '(normal)
   :prefix ",")
