@@ -31,8 +31,10 @@ We reset these here:
 #+begin_src emacs-lisp :tangle yes
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
+
 (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+
 (define-key evil-insert-state-map (kbd "C-l") 'evil-window-right)
 (define-key evil-insert-state-map (kbd "C-h") 'evil-window-left)
 #+end_src
@@ -461,26 +463,33 @@ Open email you want to forward and press ~c f~.
 
 ** Saved Searches
 
+Prepared search queries. Use ~J~ (capital) to select one of these interactively.
+
 #+begin_src emacs-lisp :tangle yes
 (setq ll/notmuch-default-query "tag:inbox AND not tag:deleted AND date:3months..")
-(setq notmuch-saved-searches
-    `((:name "inbox"
-       :query ,ll/notmuch-default-query
-       :key "i"
-       :search-type: tree)
-      (:name "sent"
-       :query "tag:sent AND not tag:deleted")
-      (:name "gmail"
-       :query "tag:Gmail/Inbox AND not tag:deleted"
-       :key "g"
-       :search-type: tree)
-      (:name "personal"
-       :query "tag:Gandi/Inbox AND not tag:deleted"
-       :key "p"
-       :search-type tree)))
-(setq +notmuch-mail-folder "~/.mail")
-(setq +notmuch-sync-backend 'mbsync)
-(setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
+(after! notmuch
+    (setq notmuch-saved-searches
+        `((:name "inbox"
+        :query ,ll/notmuch-default-query
+        :key "i"
+        :search-type: tree)
+        (:name "sent"
+        :query "tag:sent AND not tag:deleted")
+        (:name "gmail"
+        :query "tag:Gmail/Inbox AND not tag:deleted"
+        :key "g"
+        :search-type: tree)
+        (:name "personal"
+        :query "tag:Gandi/Inbox AND not tag:deleted"
+        :key "p"
+        :search-type tree)))
+    (setq +notmuch-mail-folder "~/.mail")
+    (setq +notmuch-sync-backend 'mbsync)
+    (setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
+    
+    (map! :leader
+        :map notmuch-mode-map
+        :desc "Saved searches" "mj" 'notmuch-jump-search))
 #+end_src
 
 ** My Identity
@@ -540,17 +549,18 @@ This asks for a confirmation when sending an email with an empty subject.
 
 
 * VTerm
+Binding to spawn a vterm with specific window placement.
+
 #+begin_src emacs-lisp :tangle yes
 (after! vterm
-  (set-popup-rule! "*doom:vterm-popup:.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
+  (set-popup-rule! "^.*vterm.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
 (map! :leader
-    :desc "Toggle vterm" "v" #'+vterm/toggle)
+    :desc "Open vterm" "v" #'+vterm/here)
 #+end_src
 
 * Workspaces
 
 #+begin_src emacs-lisp :tangle yes
-;; Define a comma-leader only for motion states (normal, visual, operator)
 (general-create-definer comma-leader-def
   :states '(normal)
   :prefix ",")
