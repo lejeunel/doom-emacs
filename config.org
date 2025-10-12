@@ -265,11 +265,15 @@ This is acting funny when dealing with ~FROM~ instructions.
 #+begin_src emacs-lisp :tangle yes
 (setq +format-on-save-disabled-modes (add-to-list '+format-on-save-disabled-modes 'dockerfile-mode))
 #+end_src
+
 * Golang
 #+begin_src emacs-lisp :tangle yes
 (setq lsp-go-use-gofumpt t)
 #+end_src
+
 * Harpoon
+Quick dynamic bookmarks.
+
 #+begin_src emacs-lisp :tangle yes
 (map! :leader
       (:prefix-map ("r" . "Harpoon")
