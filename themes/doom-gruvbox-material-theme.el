@@ -111,7 +111,7 @@ background contrast. All other values default to \"medium\"."
 
   ;;;; Base theme face overrides
   ((button :foreground cyan :underline t :weight 'bold)
-   (cursor :background "white")
+   (cursor :background fg)
    (hl-line :background base3)
    ((line-number &override) :foreground base5)
    ((line-number-current-line &override) :background base3 :foreground yellow)
