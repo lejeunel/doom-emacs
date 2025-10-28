@@ -69,3 +69,4 @@
 ;; (package! ox-reveal)
 ;; (package! catppuccin-theme)
 (package! templ-ts-mode)
+(package! gnus-alias)
