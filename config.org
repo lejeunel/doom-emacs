@@ -4,8 +4,6 @@
 
 * Introduction
 
-$x=1$
-
 This uses the [[https://github.com/doomemacs/doomemacs][doom-emacs]] configuration framework which provides sane defaults,
 hence this personal config file is pretty minimal in itself.
 
@@ -55,8 +53,16 @@ We reset these here:
 (define-key evil-normal-state-map (kbd "C-SPC") 'toggle-maximize-window)
 #+end_src
 
-* Drag stuff
+* Dired
+#+begin_src emacs-lisp :tangle yes
+(after! dired
+  (dirvish-override-dired-mode t))
 
+(map! :leader
+       (:desc "Open" "ff" #'dirvish))
+#+end_src
+
+* Drag stuff
 Function that allow to move around selections:
 #+begin_src emacs-lisp :tangle yes
 (define-key evil-visual-state-map (kbd "K") 'drag-stuff-up)
@@ -86,6 +92,8 @@ Hide emphasis markups mark.
 (setq org-hide-emphasis-markers t)
 #+end_src
 
+** Org-appear
+
 Automatically show/hide org elements when cursor is
 placed on them, e.g. will hide/show links.
 
@@ -97,7 +105,8 @@ placed on them, e.g. will hide/show links.
 (add-hook! org-mode :append #'org-appear-mode)
 #+end_src
 
-Force company to use fixed-pitch font
+** Company
+
 #+begin_src emacs-lisp :tangle yes
 (use-package! company
   :defer t
@@ -106,15 +115,13 @@ Force company to use fixed-pitch font
    ((t (:family "JetBrainsMono Nerd Font" :height 1.0))))
   :config
         (define-key evil-insert-state-map (kbd "C-y") 'company-complete)
+        (define-key company-active-map (kbd "RET") nil)
+        (define-key company-active-map (kbd "<return>") nil)
         (setq company-idle-delay 0.1)
         (setq company-tooltip-idle-delay 0.1)
         (add-to-list '+lsp-company-backends 'company-files)
         (set-company-backend! 'org-mode 'company-files 'company-capf)
 )
-(with-eval-after-load 'company
-  ;; Unbind RET so it does not complete
-  (define-key company-active-map (kbd "RET") nil)
-  (define-key company-active-map (kbd "<return>") nil))
 #+end_src
 
 * LaTeX
@@ -312,9 +319,9 @@ Quick dynamic bookmarks.
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(map! :leader
+(map! :localleader
       :map org-mode-map
-      :desc "Preview LaTeX" "mu" 'org-latex-preview)
+      :desc "Preview LaTeX" "u" 'org-latex-preview)
 #+end_src
 
 ** Backends/Exporters
@@ -531,9 +538,69 @@ There are overlapping configuration variables that control this,
 and it's a little confusing, but setting these three works for me:
 
 #+begin_src emacs-lisp :tangle yes
-(setq mail-specify-envelope-from t)
-(setq message-sendmail-envelope-from 'header)
-(setq mail-envelope-from 'header)
+(setq mail-envelope-from 'header
+    mail-specify-envelope-from t 
+    message-sendmail-envelope-from 'header 
+    sendmail-program "/home/laurent/.nix-profile/bin/msmtp")
+#+end_src
+
+** Identities
+
+#+begin_src emacs-lisp :tangle yes
+(autoload 'gnus-alias-determine-identity "gnus-alias" "" t)
+
+;; Define two identities, "home" and "work"
+(setq gnus-alias-identity-alist
+        '(("gmail"
+            nil ;; Does not refer to any other identity
+            "Laurent Lejeune <olol85@gmail.com>" ;; Sender address
+            nil ;; No organization header
+            nil ;; No extra headers
+            nil
+            nil)
+        ("gandi"
+            nil
+            "Laurent Lejeune <me@lejeunel.org>"
+            nil
+            nil
+            nil
+            nil)))
+(setq gnus-alias-default-identity "gandi"
+        message-cite-reply-position 'above)
+
+;; Determine identity when message-mode loads
+(add-hook 'message-setup-hook 'gnus-alias-determine-identity)
+
+(advice-add 'notmuch-show-reply-sender :after #'gnus-alias-select-identity)
+(advice-add 'notmuch-show-reply :after #'gnus-alias-select-identity)
+#+end_src
+
+
+** Signatures
+We define a number of identities and advise notmuch to
+add it on top of new replies. This is necessary because by default
+Emacs considers that replies go at the bottom of the thread, which
+is a convention that is unfortunately not observed today.
+
+#+begin_src emacs-lisp :tangle yes
+(defvar ll/email-signatures
+  '(("gmail" . "-- \nLaurent Lejeune\nolol85@gmail.com")
+    ("gandi" . "-- \nLaurent Lejeune\nme@lejeunel.org\nhttps://lejeunel.org")))
+
+(defun ll/insert-signature ()
+  "Manually insert the signature for current identity at point."
+  (interactive)
+  (if gnus-alias-current-identity
+      (let ((signature (cdr (assoc gnus-alias-current-identity ll/email-signatures))))
+        (if signature
+            (let ((original-point (point)))
+                (insert "\n\n" signature "\n\n")
+                (goto-char original-point) )
+          (message "No signature defined for identity: %s" gnus-alias-current-identity)))
+    (message "No identity selected. Use gnus-alias-select-identity first.")))
+
+(advice-add 'notmuch-show-reply-sender :after #'ll/insert-signature)
+(advice-add 'notmuch-show-reply :after #'ll/insert-signature)
 #+end_src
 
 ** Forwarding
@@ -558,7 +625,6 @@ This asks for a confirmation when sending an email with an empty subject.
 (add-hook 'message-send-hook 'my-notmuch-mua-empty-subject-check)
 #+end_src
 
-
 * VTerm
 Binding to spawn a vterm with specific window placement.
 
@@ -566,7 +632,23 @@ Binding to spawn a vterm with specific window placement.
 (after! vterm
   (set-popup-rule! "^.*vterm.*" :size 0.5 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
 (map! :leader
-    :desc "Open vterm" "v" #'+vterm/here)
+      (:prefix-map ("v" . "VTerm")
+       (:desc "Open" "v" #'+vterm/here
+       :desc "Toggle" "t" #'+vterm/toggle
+        :desc "Open (project)" "p" 'projectile-run-vterm)))
+#+end_src
+
+Add a "one character cell" on the left to vterm windows.
+#+begin_src emacs-lisp :tangle yes
+(defun ll/set-left-margin-vterm ()
+  (interactive)
+ (set-window-margins (selected-window) 1))
+
+(add-hook! 'vterm-mode-hook #'ll/set-left-margin-vterm)
+(advice-add '+vterm/toggle :after
+            (lambda (&rest _)
+              (when (derived-mode-p 'vterm-mode)
+                (ll/set-left-margin-vterm))))
 #+end_src
 
 * Workspaces
