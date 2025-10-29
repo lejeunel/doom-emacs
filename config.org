@@ -72,6 +72,7 @@ Function that allow to move around selections:
 * Appearance
 Colors and fonts
 #+begin_src emacs-lisp :tangle yes
+(setq doom-gruvbox-material-dark-variant "hard")
 (setq doom-theme 'doom-gruvbox-material) ; dark variant
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
@@ -277,6 +278,12 @@ This is acting funny when dealing with ~FROM~ instructions.
 * Golang
 #+begin_src emacs-lisp :tangle yes
 (setq lsp-go-use-gofumpt t)
+#+end_src
+
+* C++
+Enable LSP-based formatting in c++-ts-mode
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'c++-ts-mode-hook #'+format-with-lsp-mode)
 #+end_src
 
 * Harpoon
@@ -506,6 +513,7 @@ Prepared search queries. Use ~J~ (capital) to select one of these interactively.
     (setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
     
     (map! :leader
+        :mode notmuch-mode
         :map notmuch-mode-map
         :desc "Saved searches" "mj" 'notmuch-jump-search))
 #+end_src
