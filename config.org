@@ -161,7 +161,6 @@ We simply set it to the ~%(latex)~ expansion (from ~TeX-expand-list-builtin~), r
 We need to set the ~TeX-check-TeX~ variable to ~nil~ since AucTeX will try to find a traditional distribution like ~TeXLive~ or others, and will fail since Tectonic doesn’t meet its criteria.
 
 Additionally, we should also set ~TeX-process-asynchronous~ to ~t~, so that running Tectonic in watch mode doesn’t hang up Emacs.
-
 We’ll also just ensure that the ~TeX-engine~ is set to ~default~.
 
 #+begin_src emacs-lisp :tangle yes
@@ -461,7 +460,6 @@ background of code to whatever theme I'm using's background"
      "* %U %? \n\n"
      :empty-lines-after 1))))
 #+end_src
-
 
 * Others
 
