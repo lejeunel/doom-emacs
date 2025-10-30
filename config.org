@@ -70,15 +70,15 @@ Function that allow to move around selections:
 #+end_src
 
 * Appearance
-Colors and fonts
+** Colors and fonts
 #+begin_src emacs-lisp :tangle yes
+(setq doom-theme 'doom-gruvbox-material)
 (setq doom-gruvbox-material-dark-variant "hard")
-(setq doom-theme 'doom-gruvbox-material) ; dark variant
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :height 1.0 :weight 'normal))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
 #+end_src
 
-Indentation guides
+** Indentation guides
 #+begin_src emacs-lisp :tangle yes
 (setq highlight-indent-guides-auto-odd-face-perc 50)
 (setq highlight-indent-guides-auto-even-face-perc 50)
