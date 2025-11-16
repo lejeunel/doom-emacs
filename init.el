@@ -84,6 +84,7 @@
        tree-sitter
        ;;ansible
        ;;debugger          ; FIXME stepping through code, to help you add bugs
+       biblio ;;Writes a PhD for you (citation needed)
        direnv
        docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
@@ -140,7 +141,7 @@
        ;;nim               ; python + lisp at the speed of c
        (nix +tree-sitter +lsp)               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +present +roam2 +dragndrop +pretty +hugo)               ; organize your plain life in plain text
+       (org +present +roam +dragndrop +pretty +hugo)               ; organize your plain life in plain text
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more

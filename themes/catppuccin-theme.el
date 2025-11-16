@@ -75,9 +75,9 @@ The theme has to be reloaded after changing anything in this group."
   "The flavor to use for the Catppuccin theme.
 Must be one of `mocha`, `macchiato`, `frappe`, or `latte`."
   :type '(choice (const :tag "Mocha" mocha)
-                 (const :tag "Macchiato" macchiato)
-                 (const :tag "Frappe" frappe)
-                 (const :tag "Latte" latte))
+          (const :tag "Macchiato" macchiato)
+          (const :tag "Frappe" frappe)
+          (const :tag "Latte" latte))
   :group 'catppuccin)
 
 (defcustom catppuccin-mocha-colors '((rosewater . "#f5e0dc")
@@ -216,15 +216,15 @@ Must be one of `mocha`, `macchiato`, `frappe`, or `latte`."
         (str "#"))
     (while (<= i 5)
       (setq str
-      (concat
-       str
-       (format
-        "%02x"
-        (* (round
-      (/
-       (string-to-number (substring color i (+ i 2)) 16)
-       17))
-     17))))
+            (concat
+             str
+             (format
+              "%02x"
+              (* (round
+                  (/
+                   (string-to-number (substring color i (+ i 2)) 16)
+                   17))
+                 17))))
       (setq i (+ i 2)))
     str))
 
@@ -241,7 +241,7 @@ Must be one of `mocha`, `macchiato`, `frappe`, or `latte`."
     "Lighten COLOR by VALUE%."
     (let* ((factor (/ value 100.0)))
       (apply rgb-to-hex (mapcar (lambda (v) (funcall rnd (min 255 (+ (* (- 255 v) factor) v))))
-              (funcall hex-to-rgb color)))))
+                                (funcall hex-to-rgb color)))))
 
   (defun catppuccin-darken (color value)
     "Darken COLOR by VALUE%."
@@ -267,9 +267,9 @@ If called non-interactively, the FLAVOR must be one of 'frappe, 'latte, 'macchia
                   '(frappe latte macchiato mocha)
                   nil   ;; predicate
                   t)))) ;; require-match
-    (setq catppuccin-flavor flavor)
-    (catppuccin-reload)
-    (message "Catppuccin flavor now %s" flavor))
+  (setq catppuccin-flavor flavor)
+  (catppuccin-reload)
+  (message "Catppuccin flavor now %s" flavor))
 
 (defun catppuccin-set-color (color value &optional flavor)
   "Set the COLOR of FLAVOR or the current flavor to VALUE."
@@ -1066,6 +1066,10 @@ If called non-interactively, the FLAVOR must be one of 'frappe, 'latte, 'macchia
                (ansi-color-bright-cyan :foreground ,ctp-teal)
                (ansi-color-bright-white :foreground ,ctp-subtext0)
 
+               ;;notmuch
+               (notmuch-tree-match-author-face :foreground ,ctp-blue)
+               (notmuch-tree-match-tag-face :foreground ,ctp-green)
+               (notmuch-tag-unread :foreground ,ctp-red)
                ;; treemacs
                (treemacs-async-loading-face :foreground ,ctp-text)
                (treemacs-directory-face :foreground ,ctp-blue)

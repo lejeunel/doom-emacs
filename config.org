@@ -27,14 +27,37 @@ hence this personal config file is pretty minimal in itself.
 Evil-mode does not conform precisely to vim's standard keybinding.
 We reset these here:
 #+begin_src emacs-lisp :tangle yes
-(define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
-(define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
+(with-eval-after-load 'evil
+  (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
 
-(define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-(define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
 
-(define-key evil-insert-state-map (kbd "C-l") 'evil-window-right)
-(define-key evil-insert-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-insert-state-map (kbd "C-l") 'evil-window-right)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-normal-state-map (kbd "C-;") 'embark-act)
+  (define-key evil-insert-state-map (kbd "C-;") 'embark-act)
+  )
+#+end_src
+
+* Wayland
+This dynamically sets the ~WAYLAND_DISPLAY~ variable, which is needed
+to launch GUI applications.
+In practice, this is only needed when using the daemon.
+
+We register our function as a hook for each new emacs frame.
+
+#+begin_src emacs-lisp :tangle yes
+(defun ll/set-wayland-socket ()
+  (unless (getenv "WAYLAND_DISPLAY")
+    (let* ((runtime (or (getenv "XDG_RUNTIME_DIR")
+                        (format "/run/user/%s" (user-uid))))
+           (wayland (car (directory-files runtime nil "^wayland-[0-9]+$"))))
+      (when wayland
+        (setenv "WAYLAND_DISPLAY" wayland)))))
+
+(add-hook! 'server-after-make-frame-hook :append #'ll/set-wayland-socket)
 #+end_src
 
 * Window Management
@@ -47,7 +70,6 @@ We reset these here:
     (winner-undo)
     (delete-other-windows)))
 #+end_src
-
 
 #+begin_src emacs-lisp :tangle yes
 (define-key evil-normal-state-map (kbd "C-SPC") 'toggle-maximize-window)
@@ -72,9 +94,14 @@ Function that allow to move around selections:
 * Appearance
 ** Colors and fonts
 #+begin_src emacs-lisp :tangle yes
-(setq doom-theme 'doom-gruvbox-material)
-(setq doom-gruvbox-material-dark-variant "hard")
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :height 1.0 :weight 'normal))
+(use-package! modus-catppuccin
+  :ensure t
+  :config
+  (load-theme 'catppuccin-macchiato :no-confirm))
+
+;; (setq doom-theme 'catppuccin)
+;; (setq catppuccin-flavor 'macchiato)
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :height 1.0 :weight 'normal))
 (setq truncate-lines 'nil)
 #+end_src
 
@@ -106,7 +133,7 @@ placed on them, e.g. will hide/show links.
 (add-hook! org-mode :append #'org-appear-mode)
 #+end_src
 
-** Company
+* Company
 
 #+begin_src emacs-lisp :tangle yes
 (use-package! company
@@ -380,11 +407,8 @@ A couple custom LaTeX classes.
                 ("\\subsection{%s}" . "\\subsection*{%s}")
                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-)
+                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 #+end_src
-
 
 Detect french-style quotes when exporting
 
@@ -425,40 +449,138 @@ background of code to whatever theme I'm using's background"
 (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
 #+end_src
 
-** Org-ref / bibtex
-- We define in ~org-ref-default-bibliography~ a default ~bib~ file.
-- We use [[https://tectonic-typesetting.github.io/en-US/][tectonic]] to generate ~pdf~ files from LaTeX.
-- When adding citations in popup buffer, finish by using *M-Enter*.
+** Bibliography Management
+Use [[https://github.com/emacs-citar/citar?tab=readme-ov-file#usage][citar]] to auto complete, store notes, and manage a ~bibtex~ bibliographical collection.
 
 #+begin_src emacs-lisp :tangle yes
-(use-package! org-ref
-  :defer t
-    :init
-        (setq org-ref-bibliography-notes "~/org/paper-notes/paper-notes.org"
-            org-ref-default-bibliography "~/org/refs.bib"
-            bibtex-completion-bibliography org-ref-default-bibliography
-            bibtex-completion-notes-path "~/org/paper-notes/paper-notes.org"
-            bibtex-completion-pdf-open-function
-                (lambda (fpath)
-                (call-process "zathura" nil 0 nil fpath))))
+(use-package! citar
+  :config
+  (setq citar-bibliography (directory-files-recursively "/home/laurent/org/bibliography/bibs" (concat "\\" ".bib" "$")))
+  (setq citar-library-paths '("/home/laurent/org/bibliography/files/")
+        citar-notes-paths '("/home/laurent/org/bibliography/notes/"))
+  (setq citar-file-open-functions '(("pdf" . citar-file-open-external)
+                                    ("html" . citar-file-open-external)
+                                    (t . find-file))))
 
-(map! :localleader
-      :map org-mode-map
-      :desc "Insert citation" "c" 'org-cite-insert)
+#+end_src
+
+~citar~ is an interface to ~org-cite~ that allows to (among other things):
+
+- Open the ~pdf~ file that correspond to a bibliograph entry (if it exists).
+   The file must be located at ~citar-library-paths~ and
+  named ~${citekey}.pdf~ to be detected.
+- Create an org-roam note using a pre-defined template.
+  Here, we generate an ~org-roam~ entry (file) in ~citar-notes-paths~.
+- Open the URL of the paper (if it exists).
+
+*** Defining template
+Here, we define a number of templates to add a note for each paper, namely:
+- ~extended~: This will create a note in a separate file. This
+  is the default behaviour when selecting the /Create Org-Roam Notes/ function
+  in the main ~citar~ menu.
+- ~short~: This will capture a note and append it to an existing org file.
+  This boils down to generating a heading and appending it to an existing file.
+  This behaviour can be accessed using the custom interactive function defined
+  in a next section.
+
+#+begin_src emacs-lisp :tangle yes
+(setq org-roam-capture-templates
+        '(("s" "short bibliography note" entry "* ${citar-title}\n:PROPERTIES:\n:ID: %(org-id-new)\n:CITEKEY: ${citar-citekey}\n:AUTHOR: ${citar-author}\n:DATE: ${citar-date}\n:END:\n%?"
+           :target (file "/home/laurent/org/bibliography/inbox.org")
+           :prepend t
+           :unnarrowed t
+           )
+          ("e" "extended bibliography note (separate file)" plain "%?"
+           :if-new (file+head "/home/laurent/org/bibliography/notes/${citar-citekey}.org"
+                              "#+title: Notes on ${title}#+SETUPFILE: /home/laurent/org/bibliography/setup_file.org\n%?* References :ignore:\n#+print_bibliography:")
+           :unnarrowed t)
+          ))
+#+end_src
+
+We set the "extended" template by default.
+#+begin_src emacs-lisp :tangle yes
+(setq citar-org-roam-capture-template-key "e")
+#+end_src
+
+*** Note taking using interactive template selection
+
+We define an intermediate hydra to select a template prior to creating a note.
+
+#+begin_src emacs-lisp :tangle yes
+(defhydra ll/citar-template-hydra (:color blue :hint nil)
+  "
+Select a template:
+
+_s_: short note
+_e_: extended note (separate file)
+_q_: quit
+"
+  ("s"
+   (let ((citar-org-roam-capture-template-key "s"))
+     (call-interactively #'citar-create-note))
+   "short")
+
+  ("e"
+   (let ((citar-org-roam-capture-template-key "e"))
+     (call-interactively #'citar-create-note))
+   "extended")
+
+  ("q" nil "quit"))
+
+(defun ll/citar-create-note ()
+  "Prompt for a citar template via Hydra and create a note."
+  (interactive)
+  (ll/citar-template-hydra/body))
+#+end_src
+
+*** Interactively open bibliography file
+#+begin_src emacs-lisp :tangle yes
+(defun ll/open-citar-bibliography ()
+  "Select and open a file from citar-bibliography using completing-read."
+  (interactive)
+  (if (boundp 'citar-bibliography)
+      (if citar-bibliography
+          (let ((selected-file (completing-read "Select file: " citar-bibliography)))
+            (if (and selected-file (not (string-empty-p selected-file)))
+                (find-file selected-file)
+              (message "No file selected")))
+        (error "citar-bibliography is empty"))
+    (error "citar-bibliography is not defined")))
+#+end_src
+
+*** Keybindings
+
+#+begin_src emacs-lisp :tangle yes
+(map! :leader
+      :prefix-map ("n b" . "bibliography") 
+      :desc "open main" "m" 'citar-open
+      :desc "open entry" "e" 'citar-open-entry
+      :desc "create note" "c" #'ll/citar-create-note
+      :desc "open link" "l" #'citar-open-links
+      :desc "open file" "f" #'citar-open-files
+      :desc "open reference file" "r" #'ll/open-citar-bibliography
+      )
+    ;; (map! :leader
+    ;;     :mode notmuch-mode
+    ;;     :map notmuch-mode-map
+    ;;     :desc "Saved searches" "mj" 'notmuch-jump-search))
 #+end_src
 
 ** Org-capture
+
 #+begin_src emacs-lisp :tangle yes
-(setq org-capture-templates
-  (quote
-   (("t" "todo" entry
-     (file+headline "~/org/todo.org" "Tasks")
-     "* TODO %U %?\n\n"
-     :empty-lines-after 1)
-    ("n" "note" entry
-     (file+headline "~/org/notes.org" "Inbox")
-     "* %U %? \n\n"
-     :empty-lines-after 1))))
+(use-package! org-capture
+  :config
+  (setq org-capture-templates
+        (quote
+         (("t" "todo" entry
+           (file+headline "~/org/todo.org" "Tasks")
+           "* TODO %U %?\n\n"
+           :empty-lines-after 1)
+          ("n" "note" entry
+           (file+headline "~/org/notes.org" "Inbox")
+           "* %U %? \n\n"
+           :empty-lines-after 1)))))
 #+end_src
 
 * Others
@@ -489,27 +611,27 @@ Open email you want to forward and press ~c f~.
 Prepared search queries. Use ~J~ (capital) to select one of these interactively.
 
 #+begin_src emacs-lisp :tangle yes
-(setq ll/notmuch-default-query "tag:inbox AND not tag:deleted AND date:3months..")
+(setq ll/notmuch-default-query "tag:inbox AND not tag:deleted AND not tag:sent AND date:3months..")
 (after! notmuch
     (setq notmuch-saved-searches
         `((:name "inbox"
         :query ,ll/notmuch-default-query
         :key "i"
-        :search-type: tree)
+        :search-type tree)
         (:name "sent"
-        :query "tag:sent AND not tag:deleted"
+        :query "tag:sent and not tag:deleted"
         :key "s")
         (:name "gmail"
-        :query "tag:Gmail/Inbox AND not tag:deleted"
+        :query "tag:Gmail/Inbox and not tag:deleted"
         :key "g"
-        :search-type: tree)
+        :search-type tree)
         (:name "personal"
-        :query "tag:Gandi/Inbox AND not tag:deleted"
+        :query "tag:Gandi/Inbox and not tag:deleted"
         :key "p"
         :search-type tree)))
     (setq +notmuch-mail-folder "~/.mail")
     (setq +notmuch-sync-backend 'mbsync)
-    (setq +notmuch-home-function (lambda () (notmuch-search ll/notmuch-default-query)))
+    (setq +notmuch-home-function (lambda () (notmuch-tree ll/notmuch-default-query)))
     
     (map! :leader
         :mode notmuch-mode
@@ -574,14 +696,7 @@ and it's a little confusing, but setting these three works for me:
             nil)))
 (setq gnus-alias-default-identity "gandi"
         message-cite-reply-position 'above)
-
-;; Determine identity when message-mode loads
-(add-hook 'message-setup-hook 'gnus-alias-determine-identity)
-
-(advice-add 'notmuch-show-reply-sender :after #'gnus-alias-select-identity)
-(advice-add 'notmuch-show-reply :after #'gnus-alias-select-identity)
 #+end_src
-
 
 ** Signatures
 We define a number of identities and advise notmuch to
@@ -642,9 +757,10 @@ Upon running ~mbsync~, the email, originally stored locally, will be synced to t
 Enter a directory (without the maildir /cur ending which will be appended automatically).
 
 #+begin_src emacs-lisp :tangle yes
-(setq notmuch-fcc-dirs
-      '(("olol85@gmail.com" . "Gmail/Sent -inbox +sent -unread")
-        ("me@lejeunel.org"     . "Gandi/Sent -inbox +sent -unread")))
+(after! notmuch
+    (setq notmuch-fcc-dirs
+        '(("olol85@gmail.com" . "Gmail/Sent -inbox +sent -unread")
+            ("me@lejeunel.org"     . "Gandi/Sent -inbox +sent -unread"))))
 #+end_src
 
 * VTerm

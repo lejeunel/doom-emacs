@@ -51,7 +51,6 @@
                                         ;(package! builtin-package :recipe (:branch "develop"))
 
 ;; (package! iflipb)
-(package! org-ref)
 (package! py-yapf)
 (package! typopunct)
 (package! langtool)
@@ -67,6 +66,9 @@
            :repo "awth13/org-appear"))
 ;; (package! org-reveal)
 ;; (package! ox-reveal)
-;; (package! catppuccin-theme)
+(package! catppuccin-theme)
 (package! templ-ts-mode)
 (package! gnus-alias)
+(package! modus-catppuccin
+  :recipe (:host gitlab
+           :repo "magus/modus-catppuccin"))
