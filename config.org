@@ -41,6 +41,15 @@ We reset these here:
   )
 #+end_src
 
+* Treesitter
+
+Add paths to treesitter grammar libraries:
+#+begin_src emacs-lisp :tangle yes
+(setq treesit-extra-load-path
+      (list (concat (getenv "HOME")
+                    "/.nix-profile/lib")))
+#+end_src
+
 * Wayland
 This dynamically sets the ~WAYLAND_DISPLAY~ variable, which is needed
 to launch GUI applications.
@@ -247,6 +256,18 @@ Download standalone [[https://languagetool.org/][LanguageTool]] server from http
 (setq python-shell-interpreter "ipython"
     python-shell-interpreter-args "-i --simple-prompt")
 #+end_src
+
+Company in *inferior-python-mode* behaves weird....
+#+begin_src emacs-lisp :tangle yes
+(map!
+ :after python
+ :map inferior-python-mode-map
+ :i "C-j" #'comint-next-input
+ :i "C-k" #'comint-previous-input
+ :i "C-n" #'comint-next-input
+ :i "C-p" #'comint-previous-input)
+#+end_src
+
 
 ** Breakpoints
 
@@ -546,6 +567,12 @@ _q_: quit
               (message "No file selected")))
         (error "citar-bibliography is empty"))
     (error "citar-bibliography is not defined")))
+#+end_src
+
+*** Set destination where captured notes can go
+#+begin_src emacs-lisp :tangle yes
+(setq org-refile-targets `(
+(,(directory-files "~/org/bibliography/" t "\\.org$") :maxlevel . 2)))
 #+end_src
 
 *** Keybindings
