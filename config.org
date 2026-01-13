@@ -827,6 +827,13 @@ Add a "one character cell" on the left to vterm windows.
                 (ll/set-left-margin-vterm))))
 #+end_src
 
+Increase refresh rate. Default is ~0.1s~
+#+begin_src emacs-lisp :tangle yes
+(use-package! vterm
+  :custom
+  (vterm-timer-delay 0.01))
+#+end_src
+
 * Workspaces
 
 #+begin_src emacs-lisp :tangle yes
