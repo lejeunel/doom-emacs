@@ -257,13 +257,12 @@ Download standalone [[https://languagetool.org/][LanguageTool]] server from http
     python-shell-interpreter-args "-i --simple-prompt")
 #+end_src
 
-Company in *inferior-python-mode* behaves weird....
 #+begin_src emacs-lisp :tangle yes
 (map!
  :after python
  :map inferior-python-mode-map
- :i "C-j" #'comint-next-input
- :i "C-k" #'comint-previous-input
+ :n "C-n" #'comint-next-input
+ :n "C-p" #'comint-previous-input
  :i "C-n" #'comint-next-input
  :i "C-p" #'comint-previous-input)
 #+end_src
