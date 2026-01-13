@@ -106,7 +106,7 @@
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :lang
-       yaml
+       (yaml +tree-sitter)
        ;;agda              ; types of types of types of types...
        ;;assembly          ; assembly for fun or debugging
        (cc +lsp +tree-sitter)    ; C/C++/Obj-C madness
