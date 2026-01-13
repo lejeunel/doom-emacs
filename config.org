@@ -327,6 +327,17 @@ This is acting funny when dealing with ~FROM~ instructions.
 (setq lsp-go-use-gofumpt t)
 #+end_src
 
+* Scheme
+
+#+begin_src emacs-lisp :tangle yes
+(map!
+ :after geiser-repl
+ :map geiser-repl-mode-map
+ :n "C-n" #'comint-next-input
+ :n "C-p" #'comint-previous-input
+ :i "C-n" #'comint-next-input
+ :i "C-p" #'comint-previous-input)
+#+end_src
 * C++
 Enable LSP-based formatting in c++-ts-mode
 #+begin_src emacs-lisp :tangle yes
