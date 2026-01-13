@@ -19,7 +19,7 @@ hence this personal config file is pretty minimal in itself.
     :desc "Next buffer" "k" #'next-buffer
     :desc "Previous buffer" "j" #'previous-buffer
     :desc "Search buffer" "/" #'+default/search-buffer
-    :desc "Search buffer" "ps" #'+default/search-project
+    :desc "Search project" "ps" #'+default/search-project
     :desc "Switch window" "TAB" #'ace-window
     :desc "Open URL" "gx" #'browse-url-at-point)
 #+end_src
