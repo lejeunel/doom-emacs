@@ -72,3 +72,6 @@
 (package! modus-catppuccin
   :recipe (:host gitlab
            :repo "magus/modus-catppuccin"))
+(package! iflipb
+  :recipe (:host github
+           :repo "jrosdahl/iflipb"))
