@@ -154,8 +154,8 @@ placed on them, e.g. will hide/show links.
         (define-key evil-insert-state-map (kbd "C-y") 'company-complete)
         (define-key company-active-map (kbd "RET") nil)
         (define-key company-active-map (kbd "<return>") nil)
-        (setq company-idle-delay 0.1)
-        (setq company-tooltip-idle-delay 0.1)
+        (setq company-idle-delay 0.3)
+        (setq company-tooltip-idle-delay 0.3)
         (add-to-list '+lsp-company-backends 'company-files)
         (set-company-backend! 'org-mode 'company-files 'company-capf)
 )
@@ -312,6 +312,16 @@ with [[https://github.com/douglasdavis/numpydoc.el][numpydoc.el]].
 (map! :localleader
       :map python-ts-mode-map
       :desc "Auto docstring"  "s" 'numpydoc-generate)
+#+end_src
+
+* Nix
+#+begin_src emacs-lisp :tangle yes
+(after! lsp-mode
+  (lsp-register-client (make-lsp-client
+                        :new-connection (lsp-stdio-connection "nixd")
+                        :major-modes '(nix-mode)
+                        :server-id 'nixd
+                        :priority 10)))
 #+end_src
 
 * Docker
@@ -673,7 +683,9 @@ Prepared search queries. Use ~J~ (capital) to select one of these interactively.
     (map! :leader
         :mode notmuch-mode
         :map notmuch-mode-map
-        :desc "Saved searches" "mj" 'notmuch-jump-search))
+        :desc "Saved searches" "mj" 'notmuch-jump-search
+        :desc "View part" "mv" 'notmuch-show-view-part
+        ))
 #+end_src
 
 ** My Identity
